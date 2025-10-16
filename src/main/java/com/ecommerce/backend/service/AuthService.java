@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.backend.constant.AuthConstants;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.enums.UserRole;
+import com.ecommerce.backend.pojo.LoginData;
 import com.ecommerce.backend.pojo.SignupData;
 import com.ecommerce.backend.repository.UserRepository;
 
@@ -52,6 +53,31 @@ public class AuthService {
 		Map<String, Object> response = new HashMap<>();
 		response.put("userData", user);
 		response.put("token", token);
+		return response;
+		
+	}
+	
+	
+	public Map<String, Object> userLogin(LoginData logindata) throws Exception {
+		
+		Optional<User> dbOptional = userRepository.findByEmailId(logindata.getEmailId());
+		
+		if(dbOptional.isEmpty()) {
+			throw new Exception("User is not found..! Please signup ");
+		}
+		
+		
+		User user = dbOptional.get();
+		if(passwordEncoder.matches(logindata.getPassword(), user.getPasswordHash())==false) {
+			throw new Exception("Pasword is invalid");
+		}
+		
+		
+		String token = jwtService.generateJwtToken(user);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put("userData",user);
+		response.put("token",token);
 		return response;
 		
 	}

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.backend.constant.ExceptionConstants;
+import com.ecommerce.backend.pojo.LoginData;
 import com.ecommerce.backend.pojo.SignupData;
 import com.ecommerce.backend.service.AuthService;
 
@@ -29,6 +30,7 @@ public class AuthController {
 	public ResponseEntity<?> createUser(@Valid @RequestBody SignupData signupData) throws Exception{
 		
 		 Map<String, Object> signup = authService.signup(signupData);
+		 
 		Map<String, Object> response = new HashMap<>();
 		response.put(ExceptionConstants.API_STATUS, ExceptionConstants.API_SUCCESS);
 		response.put(ExceptionConstants.API_MESSAGE, "New User signup (or) Created Successfully");
@@ -38,6 +40,19 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(response);
 	}
 	
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@Valid @RequestBody LoginData loginData) throws Exception{
+		Map<String, Object> userLogin = authService.userLogin(loginData);
+		Map<String, Object> response = new HashMap<>();
+		response.put(ExceptionConstants.API_STATUS, ExceptionConstants.API_SUCCESS);
+		response.put(ExceptionConstants.API_MESSAGE, "You have logged in successfully");
+		response.put(ExceptionConstants.API_DATA, userLogin);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "Bearer " + userLogin.get("token").toString());
+		
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
+	}
 	
 	
 	

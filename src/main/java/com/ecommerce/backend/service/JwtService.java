@@ -23,7 +23,7 @@ public class JwtService {
 	@Value("${jwt.secret.key}")
 	private String jwtSecretKey;
 	
-	private int JWT_TOKEN_VALIDITY= 60 * 60 * 1000;
+	private int JWT_TOKEN_VALIDITY= 24 * 60 * 60 * 1000;
 	
 	
 	
