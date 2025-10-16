@@ -14,6 +14,7 @@ import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.enums.UserRole;
 import com.ecommerce.backend.pojo.ForgotPasswordSendOTP;
 import com.ecommerce.backend.pojo.LoginData;
+import com.ecommerce.backend.pojo.PasswordUpdateAfterReset;
 import com.ecommerce.backend.pojo.SignupData;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.utils.AuthUtility;
@@ -109,7 +110,31 @@ public class AuthService {
 		user.setOtp(otp);
 		userRepository.save(user);
 		
-//		return sendPlainEmail;
+
+		
+	}
+	
+	
+	
+	
+	public void passwordUpdateAfterReset(PasswordUpdateAfterReset passwordUpdateAfterReset) throws Exception {
+		
+		Optional<User> dbOptional = userRepository.findByEmailId(passwordUpdateAfterReset.getEmailId());
+		
+		if(dbOptional.isEmpty()) {
+			throw new Exception("User not found");
+			
+		}
+		
+		User user = dbOptional.get();
+		if(user.getOtp() !=Integer.parseInt( passwordUpdateAfterReset.getOtp())) {
+			throw new Exception("Invalid Otp... Please try again");
+			
+		}
+		
+		user.setPasswordHash(passwordEncoder.encode(passwordUpdateAfterReset.getPassword()));
+		user.setOtp(0);
+		userRepository.save(user);
 		
 	}
 

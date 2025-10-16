@@ -19,4 +19,7 @@ public class AuthConstants {
 	
 
 	public static final String USER_ALREADY_EXISTS="User already Exists.Please try Login";
+	public static final String ERROR_OTP_IS_REQUIRED ="OTP is required";
+	public static final String ERROR_OTP_MIN_6_CHARACTERS="OTP minimum 6 characters Long";
+	
 }
