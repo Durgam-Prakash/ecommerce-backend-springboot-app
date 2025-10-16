@@ -3,6 +3,8 @@ package com.ecommerce.backend.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend.constant.AuthConstants;
@@ -16,7 +18,8 @@ public class AuthService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	
+
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
 	public User signup(SignupData signupData) throws Exception {
 		
@@ -31,7 +34,7 @@ public class AuthService {
 		user.setFirstName(signupData.getFirstName());
 		user.setLastName(signupData.getLastName());
 		user.setEmailId(signupData.getEmailId());
-		user.setPasswordHash(signupData.getPassword());
+		user.setPasswordHash(passwordEncoder.encode(signupData.getPassword()));
 		user.setPhoneNumber(signupData.getPhoneNumber());
 		user.setRole(UserRole.BUYER);
 		
