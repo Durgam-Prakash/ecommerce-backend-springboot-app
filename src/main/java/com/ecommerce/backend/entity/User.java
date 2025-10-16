@@ -38,6 +38,8 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private UserRole role = UserRole.BUYER;
 	
+	private Integer otp;
+	
 	private LocalDateTime createdOn = LocalDateTime.now();
 	
 	private LocalDateTime updatedOn = LocalDateTime.now();

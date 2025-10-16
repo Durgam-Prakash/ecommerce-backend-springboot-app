@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.backend.constant.ExceptionConstants;
+import com.ecommerce.backend.pojo.ForgotPasswordSendOTP;
 import com.ecommerce.backend.pojo.LoginData;
 import com.ecommerce.backend.pojo.SignupData;
 import com.ecommerce.backend.service.AuthService;
@@ -57,4 +58,16 @@ public class AuthController {
 	
 	
 
+	@PostMapping("/forgot-password/send-otp")
+	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordSendOTP forgotPasswordSendOTP) throws Exception{
+		 authService.forgotPasswordSendOtp(forgotPasswordSendOTP);
+		
+		Map<String, Object> response = new HashMap<>();
+		response.put(ExceptionConstants.API_STATUS, ExceptionConstants.API_SUCCESS);
+		response.put(ExceptionConstants.API_MESSAGE, "OTP send to you mail please check your mail inbox");
+		response.put(ExceptionConstants.API_DATA, "");
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
 }

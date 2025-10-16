@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.backend.constant.AuthConstants;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.enums.UserRole;
+import com.ecommerce.backend.pojo.ForgotPasswordSendOTP;
 import com.ecommerce.backend.pojo.LoginData;
 import com.ecommerce.backend.pojo.SignupData;
 import com.ecommerce.backend.repository.UserRepository;
+import com.ecommerce.backend.utils.AuthUtility;
 
 @Service
 public class AuthService {
@@ -23,6 +25,9 @@ public class AuthService {
 	
 	@Autowired
 	private JwtService jwtService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -79,6 +84,32 @@ public class AuthService {
 		response.put("userData",user);
 		response.put("token",token);
 		return response;
+		
+	}
+	
+	
+	
+	public void forgotPasswordSendOtp(ForgotPasswordSendOTP forgotPasswordSendOTP) throws Exception {
+		
+		Optional<User> dbOptional = userRepository.findByEmailId(forgotPasswordSendOTP.getEmailId());
+		
+		if(dbOptional.isEmpty()) {
+			throw new Exception("User not found..");
+			
+		}
+		
+		User user = dbOptional.get();
+		int otp = AuthUtility.generateOtp();
+		String mailBody = "Hai  " + user.getFirstName() + ", " +" please use below otp to reset your forgot password, OTP: " + otp + "." + "Thank you";
+		
+				
+				
+		 emailService.sendPlainEmail("durgamprakash10@gmail.com", user.getEmailId(), "OTP to reset your password: test email From API", mailBody);
+		
+		user.setOtp(otp);
+		userRepository.save(user);
+		
+//		return sendPlainEmail;
 		
 	}
 
