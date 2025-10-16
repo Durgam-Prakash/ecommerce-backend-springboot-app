@@ -1,6 +1,7 @@
 package com.ecommerce.backend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,20 @@ public class ProductService {
 		}
 		
 		return searchProducts;
+		
+	}
+	
+	
+	
+	public Object getProductById(int productId) throws Exception {
+		
+		Optional<Product> byId = productRepository.findById(productId);
+		
+		if(byId.isEmpty()==true) {
+			throw new Exception("There is no id with : " + productId);
+		}
+		return byId;
+		
 		
 	}
 
