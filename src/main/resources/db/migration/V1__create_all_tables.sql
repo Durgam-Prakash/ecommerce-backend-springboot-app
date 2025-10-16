@@ -5,6 +5,7 @@ last_name varchar(100) not null,
 email_id varchar(255) not null unique,
 password_hash varchar(255) not null,
 phone_number varchar(15),
+role enum('BUYER','SELLER','ADMIN'),
 created_on timestamp default current_timestamp,
 updated_on timestamp default current_timestamp on update current_timestamp
 );

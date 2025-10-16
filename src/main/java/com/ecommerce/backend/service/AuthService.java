@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend.constant.AuthConstants;
 import com.ecommerce.backend.entity.User;
+import com.ecommerce.backend.enums.UserRole;
 import com.ecommerce.backend.pojo.SignupData;
 import com.ecommerce.backend.repository.UserRepository;
 
@@ -14,6 +15,8 @@ import com.ecommerce.backend.repository.UserRepository;
 public class AuthService {
 	@Autowired
 	private UserRepository userRepository;
+	
+	
 	
 	public User signup(SignupData signupData) throws Exception {
 		
@@ -30,6 +33,7 @@ public class AuthService {
 		user.setEmailId(signupData.getEmailId());
 		user.setPasswordHash(signupData.getPassword());
 		user.setPhoneNumber(signupData.getPhoneNumber());
+		user.setRole(UserRole.BUYER);
 		
 		User saveUser = userRepository.save(user);
 		return saveUser;

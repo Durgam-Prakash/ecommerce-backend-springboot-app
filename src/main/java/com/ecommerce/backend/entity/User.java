@@ -2,8 +2,12 @@ package com.ecommerce.backend.entity;
 
 import java.time.LocalDateTime;
 
+import com.ecommerce.backend.enums.UserRole;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +34,9 @@ public class User {
 	private String passwordHash;
 	
 	private String phoneNumber;
+	
+	@Enumerated(EnumType.STRING)
+	private UserRole role = UserRole.BUYER;
 	
 	private LocalDateTime createdOn = LocalDateTime.now();
 	
