@@ -1,5 +1,7 @@
 package com.ecommerce.backend.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,13 @@ public class AuthService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private JwtService jwtService;
+	
 
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	
-	public User signup(SignupData signupData) throws Exception {
+	public Map<String, Object> signup(SignupData signupData) throws Exception {
 		
 		
 		Optional<User> dbOptional = userRepository.findByEmailId(signupData.getEmailId());
@@ -38,9 +43,16 @@ public class AuthService {
 		user.setPhoneNumber(signupData.getPhoneNumber());
 		user.setRole(UserRole.BUYER);
 		
-		User saveUser = userRepository.save(user);
-		return saveUser;
+		System.out.println(user);
+		//User saveUser = userRepository.save(user);
+		//return saveUser;
 		
+		user = userRepository.save(user);
+		String token = jwtService.generateJwtToken(user);
+		Map<String, Object> response = new HashMap<>();
+		response.put("userData", user);
+		response.put("token", token);
+		return response;
 		
 	}
 
