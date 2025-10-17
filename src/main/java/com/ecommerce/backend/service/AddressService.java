@@ -1,5 +1,8 @@
 package com.ecommerce.backend.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +35,34 @@ public class AddressService {
 		return saveAddress;
 		
 	}
+	
+	public List<Address> viewAddress(int userId) throws Exception {
+		
+		List<Address> dbOptional = addressRepository.findByUserId(userId);
+		
+		if(dbOptional.isEmpty()) {
+			throw new Exception("Address  not found by this ID : " + userId);
+		}
+		
+		return dbOptional;
+	}
+	
+	public List<Address> viewALlAddress() {
+		List<Address> allAddresses = addressRepository.findAll();
+		return allAddresses;
+	}
+	
+	
+	public void deleteADdress(int userId,int addressId) throws Exception {
+		Optional<Address> dbOptional = addressRepository.findByUserIdAndAddressId(userId, addressId);
+		
+		if(dbOptional.isEmpty()) {
+			throw new Exception("No address found with address ID: " + addressId + " and user ID: " + userId);
+		}
+		
+		addressRepository.deleteById(addressId);
+		
+	}
+	
 
 }
