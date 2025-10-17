@@ -11,6 +11,7 @@ import com.ecommerce.backend.dto.CartDto;
 import com.ecommerce.backend.entity.Cart;
 import com.ecommerce.backend.entity.CartItem;
 import com.ecommerce.backend.pojo.AddToCartData;
+import com.ecommerce.backend.pojo.UpdateCartData;
 import com.ecommerce.backend.repository.CartItemRepository;
 import com.ecommerce.backend.repository.CartRepository;
 import com.ecommerce.backend.repository.UserRepository;
@@ -91,4 +92,32 @@ public class CartService {
 		return cartDataList;
 		
 	}
+	
+	
+	
+	public CartItem updateCartItems(int cartItemId,UpdateCartData cartData) throws Exception {
+		
+		Optional<CartItem> cartOptional = cartItemRepository.findById(cartItemId);
+		
+		if(cartOptional.isEmpty()) {
+			throw new Exception("no cart item found with ID : " + cartItemId);
+		}
+		CartItem cartItem = cartOptional.get();
+		cartItem.setQuantity(cartData.getQuantity());
+		CartItem save = cartItemRepository.save(cartItem);
+		return save;
+	}
+	
+	
+	public void deleteCart(int cartItemId) throws Exception {
+		Optional<CartItem> cartItemOptional = cartItemRepository.findById(cartItemId);
+		
+		if(cartItemOptional.isEmpty()) {
+			throw new Exception("no cart item found with ID : "  + cartItemId);
+		}
+		
+		CartItem cartItem = cartItemOptional.get();
+		cartItemRepository.delete(cartItem);
+	}
+	
 }
