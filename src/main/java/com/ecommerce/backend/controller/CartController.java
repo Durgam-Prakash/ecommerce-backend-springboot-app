@@ -15,39 +15,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.backend.constant.ExceptionConstants;
-import com.ecommerce.backend.entity.Product;
-import com.ecommerce.backend.pojo.SearchProductsAPIData;
-import com.ecommerce.backend.service.ProductService;
+import com.ecommerce.backend.dto.CartDto;
+import com.ecommerce.backend.pojo.AddToCartData;
+import com.ecommerce.backend.service.CartService;
+
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/products")
-public class ProductsController {
+@RequestMapping("/cart")
+public class CartController {
 	
 	@Autowired
-	private ProductService productService;
+	private CartService cartService;
 	
-	@PostMapping("/search")
-	public ResponseEntity<?> searchProduct(@RequestBody SearchProductsAPIData searchProductsAPIData) throws Exception{
+	@PostMapping("/add")
+	public ResponseEntity<?> addToCart(@Valid @RequestBody AddToCartData addToCartData){
 		
-		List<Product> searchProduct = productService.searchProduct(searchProductsAPIData);
+		cartService.addToCart(addToCartData);
 		Map<String, Object> response = new HashMap<>();
 		response.put(ExceptionConstants.API_STATUS, ExceptionConstants.API_SUCCESS);
-		response.put(ExceptionConstants.API_MESSAGE, "your search Products are :");
-		response.put(ExceptionConstants.API_DATA, searchProduct);
+		response.put(ExceptionConstants.API_MESSAGE,  addToCartData.getQuantity() + " products are added into your cart");
+		response.put(ExceptionConstants.API_DATA, addToCartData);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
+				
 	}
 	
 	
-	@GetMapping("/getById/{productId}")
-	public ResponseEntity<?> getProductById(@PathVariable int productId) throws Exception{
-		Object productById = productService.getProductById(productId);
+	@GetMapping("/view/{userId}")
+	public ResponseEntity<?> getCart(@PathVariable int userId) throws Exception{
 		
+		List<CartDto> cart = cartService.getCart(userId);
 		Map<String, Object> response = new HashMap<>();
 		response.put(ExceptionConstants.API_STATUS, ExceptionConstants.API_SUCCESS);
-		response.put(ExceptionConstants.API_MESSAGE,  " The product id is : " + productId + " Details are :");
-		response.put(ExceptionConstants.API_DATA, productById);
+		response.put(ExceptionConstants.API_MESSAGE, "Your cart items details");
+		response.put(ExceptionConstants.API_DATA, cart);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-  
+
 }
