@@ -14,7 +14,6 @@ import com.ecommerce.backend.pojo.AddToCartData;
 import com.ecommerce.backend.pojo.UpdateCartData;
 import com.ecommerce.backend.repository.CartItemRepository;
 import com.ecommerce.backend.repository.CartRepository;
-import com.ecommerce.backend.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -27,8 +26,8 @@ public class CartService {
 	@Autowired
 	private CartItemRepository cartItemRepository;
 	
-	@Autowired
-	private UserRepository userRepository;
+//	@Autowired
+//	private UserRepository userRepository;
 	
 	public void addToCart(AddToCartData addToCartData) {
 		
@@ -119,5 +118,10 @@ public class CartService {
 		CartItem cartItem = cartItemOptional.get();
 		cartItemRepository.delete(cartItem);
 	}
+	
+	
+
+	
+	
 	
 }
